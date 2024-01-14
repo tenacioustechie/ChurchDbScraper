@@ -1,8 +1,8 @@
 # ToDo
 
 [x] Create Project setup
-[ ] Add Model classes for ACNC APIs
-[ ] Create API call for ACNC Classifications
+[x] Add Model classes for ACNC APIs
+[x] Create API call for ACNC Classifications
 [ ] Save ACNC Classifications to mongo view
 [ ] Create Service that can call ACNC APIs
 [ ] Save ACNC data to Mongo DB

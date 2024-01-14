@@ -7,10 +7,10 @@ export interface AcncCharityRecord {
   // Api Properties
   type: string;
   uuid: string;
-  data: Data;
+  data: AcncCharityData;
 }
 
-export interface Data {
+export interface AcncCharityData {
   Name: string;
   Status: string;
   LastReported: string;
