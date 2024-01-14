@@ -14,8 +14,21 @@ export async function UpsertClassifications(classifications: AcncClassificationS
     const database = client.db("churchDB");
     const collection = database.collection<AcncClassificationSummary>("acncClassifications");
     collection.createIndex({ classie_id: 1 }, { unique: true });
-    const result = await collection.insertMany(classifications, { ordered: false });
-    console.log(`UpsertClassifications: inserted ${result.insertedCount} classifications`);
+    let updated = 0;
+    let inserted = 0;
+    for (let i = 0; i < classifications.length; i++) {
+      const classification = classifications[i];
+      const result = await collection.updateOne({ classie_id: classification.classie_id }, { $set: classification }, { upsert: true });
+      if (result.upsertedCount > 0) {
+        inserted++;
+      } else if (result.modifiedCount > 0) {
+        updated++;
+      }
+    }
+    //const result = await collection.insertMany(classifications, { ordered: false });
+    console.log(`UpsertClassifications: inserted ${inserted}, updated ${updated} classifications`);
+    const result = await collection.updateMany({ scrapeMe: { $exists: false } }, { $set: { scrapeMe: false } });
+    console.log(`UpsertClassifications: updated ${result.modifiedCount} classifications inserted and set to NOT scrape data`);
   } catch (err) {
     console.error(`UpsertClassifications: Error - inserting classifications`, err);
     console.error(err);

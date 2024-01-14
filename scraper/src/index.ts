@@ -14,6 +14,8 @@ async function runProgram() {
   await UpsertClassifications(classifications);
   console.log("");
 
+  return;
+
   // TODO: return classifications from DB here
   const classificationsToQuery = classifications;
   // classificationsToQuery.forEach(async (classification) => { // runs parallel queries
