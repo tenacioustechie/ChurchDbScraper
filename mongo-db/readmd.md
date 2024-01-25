@@ -23,5 +23,7 @@ docker run -it --network default -p 27017:27017 -v $pwd/data:/data/db -e MONGO_I
 # Run Mongo Express Web Interface
 
 ```sh
-docker run -it --rm -p 127.0.0.1:8081:8081 -d --name mongo-express --network default -e ME_CONFIG_MONGODB_URL="mongodb://dbadmin:3ra24N4p7Ubd6H98hKaX@10.25.3.182:27017" mongo-express
+docker run -it --rm -p 8081:8081 -d --name mongo-express --network default -e ME_CONFIG_MONGODB_URL="mongodb://dbadmin:3ra24N4p7Ubd6H98hKaX@10.25.3.182:27017" mongo-express
+
+docker run -it --rm -p 8081:8081 -d --name mongo-express --network default -e ME_CONFIG_MONGODB_URL="mongodb://dbadmin:3ra24N4p7Ubd6H98hKaX@172.20.10.2:27017" mongo-express
 ```
