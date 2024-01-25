@@ -1,8 +1,9 @@
 import { MongoClient } from "mongodb";
-import { GetClassifications } from "./service/AcncApi";
-import { CreateIndexes, GetCharityRecords, UpsertCharities, UpsertCharityRecord, UpsertClassifications } from "./service/DbMongoApi";
-import { AcncClassificationSummary } from "./models/acnc-classification-summary";
-import { GetCharityByClassification, GetCharityDetails } from "./service/AcncCharityApi";
+import { AcncClassification } from "./models/acnc-classification";
+import { GetClassifications } from "./service/AcncClassificationApi";
+import { GetCharityResponse, GetCharityDetails } from "./service/AcncCharityDetailApi";
+import { GetCharitySummariesByClassification } from "./service/AcncCharitySummaryApi";
+import { CreateIndexes, GetCharityRecords, GetCharitySummaries, UpsertCharities, UpsertCharityData, UpsertCharityRecord, UpsertCharitySummaries, UpsertClassifications } from "./service/DbMongoApi";
 
 console.log("Hello World! This is the scraper.");
 
@@ -14,28 +15,27 @@ async function runProgram() {
   console.log("");
 
   // get AcncClassifications
-  /*
-  console.warn("Getting Classifications...");
-  const classifications: AcncClassificationSummary[] = await GetClassifications();
+  /* console.warn("Getting Classifications...");
+  const classifications: AcncClassification[] = await GetClassifications();
   console.warn("Upsert Classifications into database...");
   await UpsertClassifications(classifications);
   console.log(""); /* */
 
-  // TODO: return classifications from DB here
-  /*
+  // get AcncClassifications from DB here
   const classificationsToQuery = await GetClassifications();
   // classificationsToQuery.forEach(async (classification) => { // runs parallel queries
   for (var i = 0; i < classificationsToQuery.length; i++) {
     const classification = classificationsToQuery[i];
 
-    const charities = await GetCharityByClassification(classification.classie_id);
+    const charitySummaries = await GetCharitySummariesByClassification(classification.classie_id);
     //console.log(charities);
-    console.warn(`Found ${charities.length} charities for ${classification.name}`);
+    console.warn(`Found ${charitySummaries.length} charities for ${classification.name}`);
 
-    await UpsertCharities(charities);
+    await UpsertCharitySummaries(charitySummaries);
+    break; // temporary break until first successful run
   } /* */
 
-  /* 
+  /*
   // error 400
   var uuid = "65261b42-2876-ee11-8179-002248935564";
   let charityDetails = await GetCharityDetails(uuid);
@@ -48,26 +48,36 @@ async function runProgram() {
 
   process.exit(0); */
 
-  // cycle through actual charity records and pull full data
-  const charities = await GetCharityRecords();
-  console.warn(`Found ${charities.length} charities to get details for`);
-  for (var i = 0; i < charities.length; i++) {
-    const charity = charities[i];
-
-    console.warn(`Getting details for ${charity.uuid} - ${charity.data.Name}`);
-    const response = await GetCharityDetails(charity.data.CharityUuid);
-    if (response.success && response.data != null) {
-      UpsertCharityRecord(response.data);
-      console.info(`Upserted ${charity.uuid} - ${charity.data.Name}`);
-      console.log(response.data);
-
-      // temporary break until first successful run
-      break;
-    } else {
-      console.error(`Error getting details for ${charity.uuid} - ${charity.data.Name}`);
-    }
-    await new Promise((resolve) => setTimeout(resolve, 10000)); // sleep 10 seconds
+  /* var charityUUID = "24ef3439-38af-e811-a962-000d3ad24a0d";
+  const response = await GetCharityDetails(charityUUID);
+  if (response.success && response.data != null) {
+    await UpsertCharityData(response.data.data);
+    console.info(`Upserted ${response.data.data.uuid} - ${response.data.data.Name}`);
+    console.log(response.data.data);
+  } else {
+    console.error(`Error getting details for ${charityUUID}`);
   }
+  process.exit(0); // temporary /*  */
+
+  // cycle through actual charity records and pull full data
+  const charitySummaries = await GetCharitySummaries();
+  console.warn(`Found ${charitySummaries.length} charities to get details for`);
+  for (var i = 0; i < charitySummaries.length; i++) {
+    const charity = charitySummaries[i];
+
+    console.warn(`Getting details for ${charity.CharityUuid} - ${charity.CharityName}`);
+    const response = await GetCharityDetails(charity.CharityUuid);
+    if (response.success && response.data != null) {
+      await UpsertCharityData(response.data.data);
+      console.info(`Upserted ${charity.CharityUuid} - ${charity.CharityName}`);
+      // console.log(response.data);
+    } else {
+      console.error(`Error getting details for ${charity.CharityUuid} - ${charity.CharityName}`);
+      break;
+    }
+    await new Promise((resolve) => setTimeout(resolve, 5000)); // sleep 10 seconds
+  } /* */
+  console.log("done");
 
   // console.log("Response: ", response);
   // console.log("Response: ", response.data.results);

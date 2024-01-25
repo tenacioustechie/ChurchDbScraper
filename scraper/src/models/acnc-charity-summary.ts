@@ -22,10 +22,10 @@
 export interface AcncCharitySummary {
   type: string;
   uuid: string;
-  data: Data;
+  data: AcncCharitySummaryData;
 }
 
-export interface Data {
+export interface AcncCharitySummaryData {
   uuid: string;
   Name: string;
   ProgramBeneficiaries: string[];

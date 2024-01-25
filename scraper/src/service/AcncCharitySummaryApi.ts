@@ -1,14 +1,14 @@
 import { AcncCharityData, AcncCharityRecord } from "../models/acnc-charity-record";
-import { AcncCharitySummary } from "../models/acnc-charity-summary";
+import { AcncCharitySummary, AcncCharitySummaryData } from "../models/acnc-charity-summary";
 
 const axios = require("axios").default;
 
 // Want to use async/await? Add the `async` keyword to your outer function/method.
-export async function GetCharitySummariesByClassification(classificationId: string): Promise<AcncCharitySummary[]> {
+export async function GetCharitySummariesByClassification(classificationId: string): Promise<AcncCharitySummaryData[]> {
   const searchTerm = "church";
   const urlBase = `https://www.acnc.gov.au/api/dynamics/search/program?classie=${classificationId}&items_per_page=100`;
   console.log(`API-GetCharityByClassification: getting charities from ${urlBase}`);
-  var charitySummaries: AcncCharitySummary[] = [];
+  var charitySummaries: AcncCharitySummaryData[] = [];
 
   let url = urlBase;
   let response;
@@ -21,7 +21,8 @@ export async function GetCharitySummariesByClassification(classificationId: stri
       var totalPages = response.data.pager.total_pages;
       var currentPage = response.data.pager.current_page;
       console.log(`API-GetCharitySummariesByClassification: received ${response.data.results.length} of ${totalResults} charities for page ${currentPage} of ${totalPages}`);
-      charitySummaries = charitySummaries.concat(response.data.results as AcncCharitySummary[]);
+      var list = response.data.results as AcncCharitySummary[];
+      charitySummaries = charitySummaries.concat(list.map((item) => item.data));
 
       const nextPage = currentPage + 1;
       if (nextPage < totalPages) {

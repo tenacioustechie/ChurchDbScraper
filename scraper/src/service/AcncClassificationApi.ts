@@ -1,18 +1,18 @@
-import { AcncClassificationSummary } from "../models/acnc-classification-summary";
+import { AcncClassification } from "../models/acnc-classification";
 
 const axios = require("axios").default;
 
 // Want to use async/await? Add the `async` keyword to your outer function/method.
-export async function GetClassifications(): Promise<AcncClassificationSummary[]> {
+export async function GetClassifications(): Promise<AcncClassification[]> {
   const searchTerm = "church";
   const url = `https://www.acnc.gov.au/api/classie/search?search=${searchTerm}`;
   console.log(`API-GetClassifications: getting classifications from ${url}`);
-  var classifications: AcncClassificationSummary[] = [];
+  var classifications: AcncClassification[] = [];
 
   try {
     const response = await axios.get(url);
     console.log("API-GetClassifications: parsing response");
-    classifications = response.data.results as AcncClassificationSummary[];
+    classifications = response.data.results as AcncClassification[];
     //console.log(classifications);
     console.log(`API-GetClassifications: received ${classifications.length} classifications`);
     // look for sub classifications
@@ -36,15 +36,15 @@ export async function GetClassifications(): Promise<AcncClassificationSummary[]>
   console.log(`API-GetClassifications: returning total ${classifications.length} classifications`);
   return classifications;
 }
-async function GetSubClassifications(parentId: string): Promise<AcncClassificationSummary[]> {
+async function GetSubClassifications(parentId: string): Promise<AcncClassification[]> {
   const url = `https://www.acnc.gov.au/api/classie/search?parent=${parentId}`;
   console.log(`API-GetSubClassifications: getting sub classifications for ${parentId} from ${url}`);
-  var classifications: AcncClassificationSummary[] = [];
+  var classifications: AcncClassification[] = [];
 
   try {
     const response = await axios.get(url);
     console.log("API-GetSubClassifications: parsing response");
-    classifications = response.data.results as AcncClassificationSummary[];
+    classifications = response.data.results as AcncClassification[];
   } catch (err) {
     console.error(`API-GetSubClassifications: Error - getting sub classifications for ${parentId} from ${url}`, err);
     console.error(err);
