@@ -3,10 +3,10 @@
 [x] Create Project setup
 [x] Add Model classes for ACNC APIs
 [x] Create API call for ACNC Classifications
-[ ] Save ACNC Classifications to mongo view
-[ ] Create Service that can call ACNC APIs
-[ ] Save ACNC data to Mongo DB
-[ ] Create output CSV at end of process for sharing with basic useful data
+[x] Save ACNC Classifications to mongo view
+[x] Create Service that can call ACNC APIs
+[x] Save ACNC data to Mongo DB
+[x] Create output CSV at end of process for sharing with basic useful data
 
 # Scraping Process Plan
 

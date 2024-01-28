@@ -12,7 +12,8 @@ const collectionNameClassifications = "acncClassifications";
 
 //const uri = "mongodb+srv://<user>:<password>@127.0.0.1?retryWrites=true&writeConcern=majority";
 // TODO: consider adding username/password to the mongo server -- https://hub.docker.com/_/mongo
-const uri = "mongodb://dbadmin:3ra24N4p7Ubd6H98hKaX@127.0.0.1?retryWrites=true&writeConcern=majority";
+//const uri = "mongodb://dbadmin:3ra24N4p7Ubd6H98hKaX@127.0.0.1?retryWrites=true&writeConcern=majority";
+const uri = "mongodb://dbadmin:3ra24N4p7Ubd6H98hKaX@10.25.3.189:27017?retryWrites=true&writeConcern=majority";
 
 export async function UpsertClassifications(classifications: AcncClassification[]) {
   const client = new MongoClient(uri);
