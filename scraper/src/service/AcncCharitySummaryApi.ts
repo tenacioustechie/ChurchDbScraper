@@ -1,5 +1,6 @@
 import { AcncCharityData, AcncCharityRecord } from "../models/acnc-charity-record";
 import { AcncCharitySummary, AcncCharitySummaryData } from "../models/acnc-charity-summary";
+import { Log, LogLevel } from "./Log";
 
 const axios = require("axios").default;
 
@@ -14,13 +15,13 @@ export async function GetCharitySummariesByClassification(classificationId: stri
   let response;
   try {
     while (true) {
+      Log(LogLevel.INFO, `API-GetCharitySummariesByClassification: getting charities from api ${url}`);
       response = await axios.get(url);
-      console.log("API-GetCharitySummariesByClassification: parsing response");
       //console.log("charities api response: ", response);
       var totalResults = response.data.pager.total_results;
       var totalPages = response.data.pager.total_pages;
       var currentPage = response.data.pager.current_page;
-      console.log(`API-GetCharitySummariesByClassification: received ${response.data.results.length} of ${totalResults} charities for page ${currentPage} of ${totalPages}`);
+      Log(LogLevel.INFO, `API-GetCharitySummariesByClassification: received ${response.data.results.length} of ${totalResults} charities for page ${currentPage} of ${totalPages}`);
       var list = response.data.results as AcncCharitySummary[];
       charitySummaries = charitySummaries.concat(list.map((item) => item.data));
 
@@ -32,12 +33,12 @@ export async function GetCharitySummariesByClassification(classificationId: stri
         break;
       }
     }
-    console.log(`API-GetCharitySummariesByClassification: received ${charitySummaries.length} charities`);
+    Log(LogLevel.INFO, `API-GetCharitySummariesByClassification: received ${charitySummaries.length} charities`);
   } catch (err) {
-    console.error(response);
-    console.error(`API-GetCharitySummariesByClassification: Error - getting charities for ${classificationId} from ${url}`, err);
-    console.error(err);
+    Log(LogLevel.ERROR, response);
+    Log(LogLevel.ERROR, `API-GetCharitySummariesByClassification: ERROR - getting charities for ${classificationId} from ${url}`);
+    Log(LogLevel.ERROR, JSON.stringify(err));
   }
-  console.log(`API-GetCharitySummariesByClassification: returning total ${charitySummaries.length} charities`);
+  Log(LogLevel.INFO, `API-GetCharitySummariesByClassification: returning total ${charitySummaries.length} charities`);
   return charitySummaries;
 }

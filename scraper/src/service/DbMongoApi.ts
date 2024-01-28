@@ -101,7 +101,7 @@ export async function UpsertCharitySummaries(charities: AcncCharitySummaryData[]
     for (let i = 0; i < charities.length; i++) {
       // insert to mongo
       const charity = charities[i];
-      const result = await collection.updateOne({ uuid: charity.CharityUuid }, { $set: charity }, { upsert: true });
+      const result = await collection.updateOne({ CharityUuid: charity.CharityUuid }, { $set: charity }, { upsert: true });
       if (result.upsertedCount > 0) {
         updated++;
         console.log(`UpsertCharitySummaries: inserted ${charity.CharityUuid} - ${charity.CharityName}`);

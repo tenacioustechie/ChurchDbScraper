@@ -3,26 +3,26 @@ import { AcncClassification } from "./models/acnc-classification";
 import { GetClassifications } from "./service/AcncClassificationApi";
 import { GetCharityResponse, GetCharityDetails } from "./service/AcncCharityDetailApi";
 import { GetCharitySummariesByClassification } from "./service/AcncCharitySummaryApi";
-import { CreateIndexes, GetCharityRecords, GetCharitySummaries, UpsertCharities, UpsertCharityData, UpsertCharityRecord, UpsertCharitySummaries, UpsertClassifications } from "./service/DbMongoApi";
+import * as Db from "./service/DbMongoApi";
+import { Log, LogLevel } from "./service/Log";
 
-console.log("Hello World! This is the scraper.");
+Log(LogLevel.INFO, "Hello World! This is the scraper.");
 
 async function runProgram() {
   // update database structure
-  console.warn("Creating indexes in database...");
-  await CreateIndexes();
-  console.log("done");
-  console.log("");
+  Log(LogLevel.INFO, "Creating indexes in database...");
+  await Db.CreateIndexes();
+  Log(LogLevel.INFO, "done");
 
   // get AcncClassifications
-  /* console.warn("Getting Classifications...");
+  /* Log(LogLevel.INFO, "Getting Classifications...");
   const classifications: AcncClassification[] = await GetClassifications();
-  console.warn("Upsert Classifications into database...");
-  await UpsertClassifications(classifications);
-  console.log(""); /* */
+  Log(LogLevel.INFO, "Upsert Classifications into database...");
+  await Db.UpsertClassifications(classifications);
+  /* */
 
   // get AcncClassifications from DB here
-  const classificationsToQuery = await GetClassifications();
+  /*const classificationsToQuery = await Db.GetClassifications();
   // classificationsToQuery.forEach(async (classification) => { // runs parallel queries
   for (var i = 0; i < classificationsToQuery.length; i++) {
     const classification = classificationsToQuery[i];
@@ -31,8 +31,8 @@ async function runProgram() {
     //console.log(charities);
     console.warn(`Found ${charitySummaries.length} charities for ${classification.name}`);
 
-    await UpsertCharitySummaries(charitySummaries);
-    break; // temporary break until first successful run
+    await Db.UpsertCharitySummaries(charitySummaries);
+    //break; // temporary break until first successful run
   } /* */
 
   /*
@@ -60,24 +60,24 @@ async function runProgram() {
   process.exit(0); // temporary /*  */
 
   // cycle through actual charity records and pull full data
-  const charitySummaries = await GetCharitySummaries();
-  console.warn(`Found ${charitySummaries.length} charities to get details for`);
+  const charitySummaries = await Db.GetCharitySummaries();
+  Log(LogLevel.INFO, `Found ${charitySummaries.length} charities to get details for`);
   for (var i = 0; i < charitySummaries.length; i++) {
     const charity = charitySummaries[i];
 
-    console.warn(`Getting details for ${charity.CharityUuid} - ${charity.CharityName}`);
+    Log(LogLevel.INFO, `Getting details for ${charity.CharityUuid} - ${charity.CharityName}`);
     const response = await GetCharityDetails(charity.CharityUuid);
     if (response.success && response.data != null) {
-      await UpsertCharityData(response.data.data);
-      console.info(`Upserted ${charity.CharityUuid} - ${charity.CharityName}`);
+      await Db.UpsertCharityData(response.data.data);
+      Log(LogLevel.TRACE, `Upserted ${charity.CharityUuid} - ${charity.CharityName}`);
       // console.log(response.data);
     } else {
-      console.error(`Error getting details for ${charity.CharityUuid} - ${charity.CharityName}`);
+      Log(LogLevel.ERROR, `Error getting details for ${charity.CharityUuid} - ${charity.CharityName}`);
       break;
     }
     await new Promise((resolve) => setTimeout(resolve, 5000)); // sleep 10 seconds
   } /* */
-  console.log("done");
+  Log(LogLevel.INFO, "done"); /* */
 
   // console.log("Response: ", response);
   // console.log("Response: ", response.data.results);
