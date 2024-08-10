@@ -1,0 +1,28 @@
+{
+  "payload": {
+    "answers": [
+      { "question": { "id": "XM_N6PQK9_Kd", "title": "How many people regularly attend faith gatherings?", "type": "number" }, "type": "number", "number": "24" },
+      { "question": { "id": "ca0J-hAY4Osu", "title": "How many people aged between 0-19 regularly attend faith gatherings?", "type": "number" }, "type": "number", "number": "24" },
+      { "question": { "id": "GpPkUut2Oym9", "title": "How many people aged between 20-45 regularly attend faith gatherings?", "type": "number" }, "type": "number", "number": "24" },
+      {
+        "question": { "id": "VHh58qo0jQZs", "title": "In the last six months, how many people made a commitment to follow Jesus for the first time?", "type": "number" },
+        "type": "number",
+        "number": "24"
+      },
+      { "question": { "id": "nYCHi8TqC9bG", "title": "In the last six months, how many people recommitted to following Jesus?", "type": "number" }, "type": "number", "number": "4" },
+      {
+        "question": { "id": "DFXsUODI4T-3", "title": "How many leaders from your faith community are currently training to enter paid/vocational ministry?", "type": "number" },
+        "type": "number",
+        "number": "24"
+      },
+      { "question": { "id": "zoTS9pWscbut", "title": "**What was the average individual weekly giving over the last six months?**", "type": "number" }, "type": "number", "number": "24" }
+    ],
+    "hidden": [
+      { "name": "id", "value": "3yDolagd" },
+      { "name": "email_token", "value": "YXevd6OzGLma5MRbPzMqDr2PjQRVb90W" },
+      { "name": "email_email", "value": "brian+1@millsit.com" }
+    ],
+    "variables": null,
+    "id": "9UWiN7k31YwG5RxhlDES8TTWTwUSUWRx"
+  }
+}
