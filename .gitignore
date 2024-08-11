@@ -5,6 +5,7 @@
 
 mongo-db/data/*
 mongo-db/data-corupt/*
+DataProcessor/data/*
 
 # User-specific files
 *.rsuser
